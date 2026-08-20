@@ -30,11 +30,10 @@
             box-sizing: border-box;
         }
 
-        /* Container Principal com largura otimizada para os 4 quadrados */
         .card {
             background-color: var(--roxo);
             width: 100%;
-            max-width: 370px; /* Aumentado ligeiramente para acomodar com folga os 4 quadrados */
+            max-width: 385px; /* Levemente mais largo para dar total folga aos 4 quadrados */
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             position: relative;
             overflow: hidden;
@@ -57,7 +56,7 @@
         .label {
             font-size: 13px;
             text-align: right;
-            width: 42%;
+            width: 40%;
             line-height: 1.2;
             font-weight: 800;
             letter-spacing: -0.3px;
@@ -65,13 +64,13 @@
 
         .boxes {
             display: flex;
-            gap: 4px; /* Espaçamento levemente ajustado para encaixar perfeitamente */
-            width: 58%;
+            gap: 5px; /* Espaçamento ideal e equilibrado */
+            width: 60%;
             justify-content: flex-start;
         }
 
         input {
-            width: 31px;
+            width: 32px;
             height: 36px;
             text-align: center;
             font-size: 20px;
@@ -95,9 +94,9 @@
             margin: 8px 0;
         }
 
-        .nadine-img {
+.nadine-img {
             position: absolute;
-            left: -5px;
+            left: 9px; /* Move a foto um pouco mais para a direita, dando respiro da margem */
             bottom: -12px;
             height: 120%; 
             z-index: 10;
