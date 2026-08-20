@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colinha Digital - Delegada Nadine</title>
+    
+    <!-- Importação da fonte Montserrat do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Variáveis de Cores */
+        :root {
+            --roxo: rgb(110, 64, 143);
+            --azul-escuro: rgb(46, 48, 143);
+            --verde-escuro: rgb(63, 191, 84);
+            --verde-claro: rgb(73, 214, 97);
+            --azul-claro: rgb(145, 216, 247);
+        }
+
+        body {
+            /* Aplicando a nova fonte em todo o site */
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--azul-claro);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Container Principal */
+        .card {
+            background-color: var(--roxo);
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+        }
+
+        .text-white { color: white; }
+        
+        /* Layout das Linhas */
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 20px;
+            gap: 15px;
+        }
+
+        .label {
+            font-size: 15px;
+            text-align: right;
+            width: 45%;
+            line-height: 1.2;
+            font-weight: 800; /* Peso ExtraBold */
+            letter-spacing: -0.3px;
+        }
+
+        .boxes {
+            display: flex;
+            gap: 6px;
+            width: 55%;
+            justify-content: flex-start;
+        }
+
+        input {
+            width: 32px;
+            height: 38px;
+            text-align: center;
+            font-size: 22px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900; /* Peso Black */
+            border: none;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        /* Seção da Nadine */
+        .nadine-section {
+            background-color: var(--azul-claro);
+            padding: 15px 20px 15px 130px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: relative;
+            border-top: 3px solid white;
+            border-bottom: 3px solid white;
+            min-height: 90px;
+            margin: 10px 0;
+        }
+
+        .nadine-img {
+            position: absolute;
+            left: -10px;
+            bottom: 0;
+            height: 135%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .nadine-content { 
+            text-align: right; 
+            z-index: 2; 
+            width: 100%; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .nadine-title { 
+            color: var(--roxo); 
+            font-size: 15px; 
+            font-weight: 900; /* Peso Black */
+            margin-bottom: 6px; 
+            letter-spacing: -0.5px;
+        }
+
+        .nadine-number {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            margin-bottom: 8px;
+        }
+
+        .nadine-number div {
+            background-color: white;
+            color: var(--roxo); /* Ajustado para Roxo para dar mais contraste */
+            width: 38px;
+            height: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 34px;
+            font-weight: 900; /* Peso Black */
+            border-radius: 3px;
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+        }
+
+        .logo-img {
+            width: 140px;
+            height: auto;
+        }
+
+        /* Botão */
+        .btn-container { text-align: center; padding: 20px; }
+        
+        button {
+            background-color: white;
+            color: var(--azul-escuro);
+            border: 4px solid var(--verde-claro);
+            border-radius: 25px;
+            padding: 14px 28px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 900; /* Peso Black */
+            cursor: pointer;
+            box-shadow: 0 5px 0 var(--verde-escuro);
+            transition: 0.2s;
+        }
+        
+        button:active { transform: translateY(5px); box-shadow: none; }
+
+        /* ======= IMPRESSÃO CORRIGIDA ======= */
+        @media print {
+            body {
+                background-color: white;
+                align-items: flex-start;
+                justify-content: flex-start;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                margin: 0;
+                padding: 1cm;
+            }
+            .card {
+                width: 8.5cm;
+                max-width: none;
+                height: auto;
+                box-shadow: none;
+                margin: 0;
+            }
+            button { display: none; }
+            input { border: 1px solid #666; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        
+        <div class="row text-white">
+            <div class="label">DEPUTADO(A)<br>FEDERAL</div>
+            <div class="boxes">
+                <input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab">
+            </div>
+        </div>
+
+        <div class="nadine-section">
+            <img src="nadine.png" alt="Delegada Nadine" class="nadine-img">
+            
+            <div class="nadine-content">
+                <div class="nadine-title">DEPUTADA ESTADUAL</div>
+                <div class="nadine-number">
+                    <div>5</div><div>5</div><div>4</div><div>4</div><div>4</div>
+                </div>
+                <img src="logo.png" alt="Delegada Nadine" class="logo-img">
+            </div>
+        </div>
+
+        <div class="row text-white">
+            <div class="label">SENADOR 1</div>
+            <div class="boxes">
+                <input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab">
+            </div>
+        </div>
+
+        <div class="row text-white">
+            <div class="label">SENADOR 2</div>
+            <div class="boxes">
+                <input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab">
+            </div>
+        </div>
+
+        <div class="row text-white">
+            <div class="label">GOVERNADOR</div>
+            <div class="boxes">
+                <input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab">
+            </div>
+        </div>
+
+        <div class="row text-white">
+            <div class="label">PRESIDENTE</div>
+            <div class="boxes">
+                <input type="text" maxlength="1" class="auto-tab"><input type="text" maxlength="1" class="auto-tab">
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button onclick="window.print()">IMPRIMA SUA<br>COLINHA</button>
+        </div>
+
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll('.auto-tab');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                if (input.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
