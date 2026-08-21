@@ -124,7 +124,7 @@
 
         .nadine-section {
             background-color: var(--azul-claro);
-            padding: 12px 15px 12px 125px;
+            padding: 12px 15px 12px 130px; /* Aumentei um pouquinho o recuo para a foto caber perfeita */
             display: flex;
             justify-content: flex-end;
             align-items: center;
@@ -135,11 +135,14 @@
             margin: 8px 0;
         }
 
+        /* ===== SOLUÇÃO DA FOTO ===== */
+        /* Agora a foto usa Pixels fixos em vez de Porcentagem. Isso trava ela em todos os formatos! */
         .nadine-img {
             position: absolute;
-            left: 35px; 
-            bottom: -10px;
-            height: 135%; 
+            left: 10px; 
+            bottom: -12px; /* Mantém o vazamento na borda de baixo */
+            height: 140px; /* Tamanho fixo e imutável para a foto ficar grandinha */
+            width: auto;
             z-index: 10;
             pointer-events: none;
         }
@@ -223,28 +226,25 @@
         
         button:active { transform: translateY(4px); box-shadow: none; }
 
-        /* ========= IMPRESSÃO - AJUSTE FINAL DA IMAGEM ========= */
+        /* ===== IMPRESSÃO LIMPA E TRAVADA ===== */
         @media print {
             body {
                 background-color: white;
-                display: flex;
+                display: block; 
                 margin: 0;
-                padding: 10px;
-                height: auto;
+                padding: 20px; 
             }
             .card {
-                width: 385px !important; /* Trava a largura pro texto não espremer pra baixo da foto */
+                width: 385px !important; /* Trava a largura inteira do cartão */
                 max-width: 385px !important;
                 box-shadow: none;
                 margin: 0;
                 border: none;
+                page-break-inside: avoid !important;
             }
-            /* Trava o tamanho da foto APENAS na impressão para não tapar o número */
-            .nadine-img {
-                width: 125px !important;
-                height: auto !important;
-                bottom: -5px !important;
-            }
+            /* Apaguei as regras confusas que forçavam a foto a ficar pequena na impressão */
+            /* A foto vai apenas herdar os 140px fixos que configuramos acima! */
+            
             .btn-container, button { 
                 display: none !important; 
             }
