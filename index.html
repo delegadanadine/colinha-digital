@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Biblioteca para transformar o HTML em Imagem (Para baixar a colinha) -->
+    <!-- Biblioteca para transformar o HTML em Imagem -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
@@ -47,7 +47,21 @@
             border-radius: 8px;
         }
 
-        /* Novo Título MINHA COLINHA */
+        /* AJUSTE 1: CNPJ e Partido Eleitoral Discreto na Lateral */
+        .legal-text {
+            position: absolute;
+            left: 3px;
+            top: 50%;
+            transform: translateY(-50%) rotate(180deg);
+            writing-mode: vertical-rl;
+            font-size: 7px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.5px;
+            pointer-events: none;
+            white-space: nowrap;
+            z-index: 20;
+        }
+
         .main-title {
             color: white;
             text-align: center;
@@ -64,7 +78,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px 15px;
+            padding: 10px 15px 10px 25px; /* Mais espaço na esquerda pro texto do CNPJ não grudar */
             gap: 12px;
         }
 
@@ -84,17 +98,22 @@
             justify-content: flex-start;
         }
 
+        /* AJUSTE 2: Tamanho e alinhamento dos números */
         input {
             width: 30px;
             height: 36px;
             text-align: center;
-            font-size: 20px;
+            font-size: 26px; /* Número maior */
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
-            color: var(--roxo); /* Ajuste 3: Cor do texto digitado para Roxo */
+            color: var(--roxo);
             border: none;
             border-radius: 3px;
             text-transform: uppercase;
+            padding: 0;
+            margin: 0;
+            line-height: 36px; /* Centraliza perfeitamente na vertical */
+            box-sizing: border-box;
         }
 
         .nadine-section {
@@ -114,7 +133,7 @@
             position: absolute;
             left: 35px; 
             bottom: -12px;
-            height: 133%; 
+            height: 1350%; 
             z-index: 10;
             pointer-events: none;
         }
@@ -162,7 +181,6 @@
             height: auto;
         }
 
-        /* Container de Botões Atualizado */
         .btn-container { 
             display: flex;
             flex-direction: column;
@@ -183,7 +201,6 @@
             transition: 0.2s;
         }
 
-        /* Estilo do Botão de Baixar */
         .btn-download {
             background-color: var(--verde-claro);
             color: var(--roxo);
@@ -191,7 +208,6 @@
             box-shadow: 0 4px 0 var(--verde-escuro);
         }
 
-        /* Estilo do Botão de Imprimir */
         .btn-print {
             background-color: white;
             color: var(--azul-escuro);
@@ -201,6 +217,7 @@
         
         button:active { transform: translateY(4px); box-shadow: none; }
 
+        /* AJUSTE 4: Escondendo os botões 100% na impressão */
         @media print {
             body {
                 background-color: white;
@@ -219,8 +236,10 @@
                 margin: auto;
                 border: none;
             }
-            .btn-container { display: none; } /* Esconde a área de botões na impressão */
-            input { border: 1px solid #666; }
+            .btn-container, button { 
+                display: none !important; /* Força os botões a não aparecerem no PDF/Papel */
+            }
+            input { border: 1px solid #ccc; }
         }
     </style>
 </head>
@@ -228,7 +247,9 @@
 
     <div class="card" id="colinha">
         
-        <!-- Novo Título -->
+        <!-- Texto Legal CNPJ -->
+        <div class="legal-text">68.456.197/0001-01 | PSD - Partido Social Democrático</div>
+
         <div class="main-title">Minha Colinha</div>
 
         <div class="row text-white">
@@ -286,8 +307,8 @@
 
     </div>
 
+    <!-- AJUSTE 3: Javascript Inteligente para Download no iPhone -->
     <script>
-        // Lógica de pular os quadradinhos automaticamente
         const inputs = document.querySelectorAll('.auto-tab');
         inputs.forEach((input, index) => {
             input.addEventListener('input', () => {
@@ -302,30 +323,50 @@
             });
         });
 
-        // Função para Baixar a Colinha como Imagem para os Stories
         function baixarColinha() {
-            // Pega os botões e esconde temporariamente para eles não saírem na foto
             const botoes = document.getElementById('botoes');
-            botoes.style.display = 'none';
+            botoes.style.display = 'none'; // Esconde para não sair na foto
 
-            // Pega o card inteiro
             const colinha = document.getElementById('colinha');
 
-            // Tira o "print" do HTML
             html2canvas(colinha, {
-                scale: 3, // Multiplicador de qualidade (deixa perfeito pra stories)
-                useCORS: true, // Permite carregar a fonte e imagens direitinho
-                backgroundColor: '#6e408f' // Garante o fundo roxo
+                scale: 3, 
+                useCORS: true, 
+                backgroundColor: '#6e408f'
             }).then(canvas => {
-                // Devolve os botões para a tela
-                botoes.style.display = 'flex';
+                botoes.style.display = 'flex'; // Traz os botões de volta
 
-                // Cria um link temporário para baixar a imagem PNG
-                let link = document.createElement('a');
-                link.download = 'Minha-Colinha-Nadine-55444.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                // Converte a tela para o formato BLOB (o iPhone gosta desse)
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    
+                    // Verifica se o celular (iPhone/Android) tem suporte à API nativa de compartilhar
+                    if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'colinha.png', { type: 'image/png' })] })) {
+                        const file = new File([blob], 'Minha-Colinha-Nadine.png', { type: 'image/png' });
+                        navigator.share({
+                            files: [file],
+                            title: 'Minha Colinha - Delegada Nadine',
+                        }).catch((error) => {
+                            // Se o usuário cancelar a tela de share, tenta baixar normal
+                            fallbackDownload(url);
+                        });
+                    } else {
+                        // Se estiver no computador, usa o método clássico
+                        fallbackDownload(url);
+                    }
+                }, 'image/png');
             });
+        }
+
+        // Função de fallback para o computador
+        function fallbackDownload(url) {
+            let link = document.createElement('a');
+            link.download = 'Minha-Colinha-Nadine-55444.png';
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
         }
     </script>
 </body>
