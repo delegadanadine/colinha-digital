@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Colinha Digital - Delegada Nadine</title>
     
-    <!-- Fonte Oficial -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Biblioteca para transformar o HTML em Imagem -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <style>
@@ -47,14 +45,14 @@
             border-radius: 8px;
         }
 
-        /* AJUSTE 1: CNPJ e Partido Eleitoral Discreto na Lateral */
+        /* AJUSTE 3: Texto do CNPJ com Rotação Limpa (sem distorcer no PNG) */
         .legal-text {
             position: absolute;
-            left: 3px;
-            top: 50%;
-            transform: translateY(-50%) rotate(180deg);
-            writing-mode: vertical-rl;
-            font-size: 7px;
+            left: 14px;
+            bottom: 25px;
+            transform: rotate(-90deg);
+            transform-origin: left bottom;
+            font-size: 7.5px;
             color: rgba(255, 255, 255, 0.4);
             letter-spacing: 0.5px;
             pointer-events: none;
@@ -78,7 +76,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px 15px 10px 25px; /* Mais espaço na esquerda pro texto do CNPJ não grudar */
+            padding: 10px 15px 10px 25px; 
             gap: 12px;
         }
 
@@ -98,22 +96,33 @@
             justify-content: flex-start;
         }
 
-        /* AJUSTE 2: Tamanho e alinhamento dos números */
-        input {
-            width: 30px;
-            height: 36px;
-            text-align: center;
-            font-size: 26px; /* Número maior */
+        /* AJUSTE 1: Estrutura unificada para Inputs e Fake-Inputs (para o PNG perfeito) */
+        input, .fake-input {
+            width: 32px;
+            height: 38px;
+            font-size: 24px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
             color: var(--roxo);
+            background-color: white;
             border: none;
             border-radius: 3px;
             text-transform: uppercase;
+            box-sizing: border-box;
+        }
+
+        input {
+            text-align: center;
             padding: 0;
             margin: 0;
-            line-height: 36px; /* Centraliza perfeitamente na vertical */
-            box-sizing: border-box;
+            line-height: 38px;
+        }
+
+        /* Classe temporária usada pelo JS na hora de baixar o PNG */
+        .fake-input {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .nadine-section {
@@ -133,7 +142,7 @@
             position: absolute;
             left: 35px; 
             bottom: -12px;
-            height: 135%; 
+            height: 133%; 
             z-index: 10;
             pointer-events: none;
         }
@@ -217,29 +226,28 @@
         
         button:active { transform: translateY(4px); box-shadow: none; }
 
-        /* AJUSTE 4: Escondendo os botões 100% na impressão */
+        /* AJUSTE 2 E 4: Impressão Tamanho Bolso e Remoção de Página em Branco */
         @media print {
             body {
                 background-color: white;
-                align-items: center;
-                justify-content: center;
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
+                display: block; /* Remove o Flexbox que causava a página extra */
                 margin: 0;
-                padding: 0;
-                height: 100vh;
+                padding: 1cm; /* Margem apenas para não grudar na ponta da folha */
+                height: auto;
             }
             .card {
-                width: 100%;
-                max-width: 400px;
+                width: 7.5cm !important; /* Tamanho exato para bolso */
+                height: auto;
+                max-width: none;
                 box-shadow: none;
-                margin: auto;
+                margin: 0;
                 border: none;
+                page-break-inside: avoid; /* Evita cortar o card no meio */
             }
             .btn-container, button { 
-                display: none !important; /* Força os botões a não aparecerem no PDF/Papel */
+                display: none !important; /* Esconde os botões */
             }
-            input { border: 1px solid #ccc; }
+            input { border: 1px solid #ccc; } /* Bordinha cinza pra aparecer na impressão preta e branca */
         }
     </style>
 </head>
@@ -247,9 +255,7 @@
 
     <div class="card" id="colinha">
         
-        <!-- Texto Legal CNPJ -->
         <div class="legal-text">68.456.197/0001-01 | PSD - Partido Social Democrático</div>
-
         <div class="main-title">Minha Colinha</div>
 
         <div class="row text-white">
@@ -307,7 +313,6 @@
 
     </div>
 
-    <!-- AJUSTE 3: Javascript Inteligente para Download no iPhone -->
     <script>
         const inputs = document.querySelectorAll('.auto-tab');
         inputs.forEach((input, index) => {
@@ -325,7 +330,19 @@
 
         function baixarColinha() {
             const botoes = document.getElementById('botoes');
-            botoes.style.display = 'none'; // Esconde para não sair na foto
+            botoes.style.display = 'none';
+
+            // Truque de Ouro: Substitui os <input> por <div> para centralizar no Canvas
+            const parentNodes = [];
+            const fakeInputs = [];
+            inputs.forEach(input => {
+                const fake = document.createElement('div');
+                fake.className = 'fake-input';
+                fake.innerText = input.value;
+                parentNodes.push(input.parentNode);
+                fakeInputs.push(fake);
+                input.parentNode.replaceChild(fake, input);
+            });
 
             const colinha = document.getElementById('colinha');
 
@@ -334,31 +351,30 @@
                 useCORS: true, 
                 backgroundColor: '#6e408f'
             }).then(canvas => {
-                botoes.style.display = 'flex'; // Traz os botões de volta
+                // Traz os botões e os inputs de volta
+                botoes.style.display = 'flex';
+                fakeInputs.forEach((fake, i) => {
+                    parentNodes[i].replaceChild(inputs[i], fake);
+                });
 
-                // Converte a tela para o formato BLOB (o iPhone gosta desse)
                 canvas.toBlob(function(blob) {
                     const url = URL.createObjectURL(blob);
                     
-                    // Verifica se o celular (iPhone/Android) tem suporte à API nativa de compartilhar
                     if (navigator.share && navigator.canShare && navigator.canShare({ files: [new File([blob], 'colinha.png', { type: 'image/png' })] })) {
                         const file = new File([blob], 'Minha-Colinha-Nadine.png', { type: 'image/png' });
                         navigator.share({
                             files: [file],
                             title: 'Minha Colinha - Delegada Nadine',
-                        }).catch((error) => {
-                            // Se o usuário cancelar a tela de share, tenta baixar normal
+                        }).catch(() => {
                             fallbackDownload(url);
                         });
                     } else {
-                        // Se estiver no computador, usa o método clássico
                         fallbackDownload(url);
                     }
                 }, 'image/png');
             });
         }
 
-        // Função de fallback para o computador
         function fallbackDownload(url) {
             let link = document.createElement('a');
             link.download = 'Minha-Colinha-Nadine-55444.png';
