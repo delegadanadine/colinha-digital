@@ -45,7 +45,6 @@
             border-radius: 8px;
         }
 
-        /* AJUSTE 3: Texto do CNPJ com Rotação Limpa (sem distorcer no PNG) */
         .legal-text {
             position: absolute;
             left: 14px;
@@ -96,7 +95,6 @@
             justify-content: flex-start;
         }
 
-        /* AJUSTE 1: Estrutura unificada para Inputs e Fake-Inputs (para o PNG perfeito) */
         input, .fake-input {
             width: 32px;
             height: 38px;
@@ -118,7 +116,6 @@
             line-height: 38px;
         }
 
-        /* Classe temporária usada pelo JS na hora de baixar o PNG */
         .fake-input {
             display: flex;
             justify-content: center;
@@ -142,7 +139,7 @@
             position: absolute;
             left: 25px; 
             bottom: -12px;
-            height: 133%; 
+            height: 130%; 
             z-index: 10;
             pointer-events: none;
         }
@@ -226,28 +223,34 @@
         
         button:active { transform: translateY(4px); box-shadow: none; }
 
-        /* AJUSTE 2 E 4: Impressão Tamanho Bolso e Remoção de Página em Branco */
+        /* ========= IMPRESSÃO - AJUSTE FINAL DA IMAGEM ========= */
         @media print {
             body {
                 background-color: white;
-                display: block; /* Remove o Flexbox que causava a página extra */
+                display: flex;
                 margin: 0;
-                padding: 1cm; /* Margem apenas para não grudar na ponta da folha */
+                padding: 10px;
                 height: auto;
             }
             .card {
-                width: 7.5cm !important; /* Tamanho exato para bolso */
-                height: auto;
-                max-width: none;
+                width: 385px !important; /* Trava a largura pro texto não espremer pra baixo da foto */
+                max-width: 385px !important;
                 box-shadow: none;
                 margin: 0;
                 border: none;
-                page-break-inside: avoid; /* Evita cortar o card no meio */
+            }
+            /* Trava o tamanho da foto APENAS na impressão para não tapar o número */
+            .nadine-img {
+                width: 125px !important;
+                height: auto !important;
+                bottom: -5px !important;
             }
             .btn-container, button { 
-                display: none !important; /* Esconde os botões */
+                display: none !important; 
             }
-            input { border: 1px solid #ccc; } /* Bordinha cinza pra aparecer na impressão preta e branca */
+            input, .fake-input { 
+                border: 1px solid #ccc; 
+            }
         }
     </style>
 </head>
@@ -305,7 +308,6 @@
             </div>
         </div>
 
-        <!-- Botões -->
         <div class="btn-container" id="botoes">
             <button class="btn-download" onclick="baixarColinha()">BAIXE A SUA COLINHA</button>
             <button class="btn-print" onclick="window.print()">IMPRIMA SUA COLINHA</button>
@@ -332,7 +334,6 @@
             const botoes = document.getElementById('botoes');
             botoes.style.display = 'none';
 
-            // Truque de Ouro: Substitui os <input> por <div> para centralizar no Canvas
             const parentNodes = [];
             const fakeInputs = [];
             inputs.forEach(input => {
@@ -351,7 +352,6 @@
                 useCORS: true, 
                 backgroundColor: '#6e408f'
             }).then(canvas => {
-                // Traz os botões e os inputs de volta
                 botoes.style.display = 'flex';
                 fakeInputs.forEach((fake, i) => {
                     parentNodes[i].replaceChild(inputs[i], fake);
